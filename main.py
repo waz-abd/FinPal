@@ -5,7 +5,7 @@ import json
 import os
 
 st.set_page_config(
-    page_title="FinPal - Your Finance Dashboard",
+    page_title="FinPal - Finance Dashboard",
     page_icon="🪙",
     layout="wide"
 )
@@ -79,10 +79,10 @@ def add_keyword_to_category(category, keyword):
 
 # ---------- MAIN APP ----------
 def main():
-    st.title("FinPal 💰 – Your Finance Dashboard")
+    st.title("FinPal 💰 – Finance Dashboard")
 
     uploaded_file = st.file_uploader(
-        "Upload your Bank Statement Transaction CSV file:",
+        "Upload your Bank Statement Transaction CSV file here:",
         type=["csv"]
     )
 
@@ -117,7 +117,7 @@ def main():
 
     st.markdown("---")
 
-    tab1, tab2 = st.tabs(["💸 Expenses (Debits)", "💳 Payments (Credits)"])
+    tab1, tab2 = st.tabs(["💸 Expenses (Debit)", "💳 Payments (Credit)"])
 
     # ---------- EXPENSES TAB ----------
     with tab1:
@@ -218,7 +218,7 @@ def main():
             st.plotly_chart(fig_merchants, use_container_width=True)
 
         # 🔥 NEW: Expenses over time (line chart)
-        st.subheader("Expenses Over Time")
+        st.subheader("Monthly Expenses Over Time")
         daily_spend = (
             debits_df.groupby("Date")["Amount"]
             .sum()
@@ -229,7 +229,7 @@ def main():
             daily_spend,
             x="Date",
             y="Amount",
-            title="Daily Total Expenses"
+            title="Monthly Daily Total Expenses:"
         )
         st.plotly_chart(fig_time, use_container_width=True)
 
@@ -248,9 +248,10 @@ def main():
             x="YearMonth",
             y="Amount",
             color="Category",
-            title="Monthly Expenses by Category",
+            title="Expenses by Category Every Month:",
             barmode="stack"
         )
+        fig_monthly.update_layout(xaxis_title="Month")
         st.plotly_chart(fig_monthly, use_container_width=True)
 
     # ---------- PAYMENTS TAB ----------
@@ -262,14 +263,14 @@ def main():
 
         edited_credit_df = st.data_editor(
             st.session_state.credits_df[[
-                "Date", "Details", "Amount", "Category"]],
+                "Date", "Details", "Amount"]],
             column_config={
                 "Date": st.column_config.DateColumn("Date", format="DD/MM/YYYY"),
-                "Amount": st.column_config.NumberColumn("Amount", format="%.2f CAD"),
-                "Category": st.column_config.SelectboxColumn(
-                    "Category",
-                    options=list(st.session_state.categories.keys())
-                )
+                "Amount": st.column_config.NumberColumn("Amount", format="%.2f CAD")
+                # "Category": st.column_config.SelectboxColumn(
+                #    "Category",
+                #    options=list(st.session_state.categories.keys())
+                # )
             },
             hide_index=True,
             use_container_width=True,
@@ -289,20 +290,20 @@ def main():
             daily_income,
             x="Date",
             y="Amount",
-            title="Daily Total Payments"
+            title="Monthly Daily Total Payments:"
         )
         st.plotly_chart(fig_income_time, use_container_width=True)
 
-        st.subheader("Payments by Category")
-        income_cat = credits_df.groupby(
-            "Category")["Amount"].sum().reset_index()
-        fig_income_cat = px.bar(
-            income_cat,
-            x="Category",
-            y="Amount",
-            title="Payments by Category"
-        )
-        st.plotly_chart(fig_income_cat, use_container_width=True)
+        # st.subheader("Payments by Category")
+        # income_cat = credits_df.groupby(
+        #    "Category")["Amount"].sum().reset_index()
+        # fig_income_cat = px.bar(
+        #    income_cat,
+        #    x="Category",
+        #    y="Amount",
+        #    title="Payments by Category"
+        # )
+        # st.plotly_chart(fig_income_cat, use_container_width=True)
 
 
 main()
