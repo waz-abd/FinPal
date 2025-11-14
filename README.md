@@ -84,6 +84,23 @@ When asked to upload a CSV, you can choose the sample bank statement data:
 
 📁 **[Sample Bank Statement Data](sample_bank_statement_data.csv)**
 
+If you are uploading your own CSV file, make sure the CSV follows this basic structure:
+
+| Column         | Description                               |
+| -------------- | ----------------------------------------- |
+| `Date`         | DD MMM YYYY (e.g., 15 Feb 2025)           |
+| `Details`      | Merchant name or description              |
+| `Amount`       | Numeric amount (positive number)          |
+| `Debit/Credit` | “Debit” for expenses, “Credit” for income |
+
+
+```bash
+Date,Details,Amount,Debit/Credit
+15 Feb 2025,Loblaws,112.45,Debit
+28 Feb 2025,Card Payment Received,4500.00,Credit
+```
+
+
 ---
 
 ## 🤝 **Contributions**
